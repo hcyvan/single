@@ -1,14 +1,12 @@
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, Integer, Text
 
-from . import BaseModel
+from .base import BaseModel
 
 
 class Notice(BaseModel):
-    id = Column(String(36), primary_key=True)
-    username = Column(String(64), unique=True)
-    password = Column(String(128))
-    cell = Column(String(64))
-    point = Column(Integer)
-
-    exclude_fields = ['password']
+    id = Column(Integer, primary_key=True)
+    form_id = Column(Integer, unique=True)
+    to_id = Column(Integer)
+    content = Column(Text)
+    is_read = Column(Integer)
 

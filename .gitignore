@@ -1,1 +1,4 @@
 .idea/*
+env.py
+dog.db
+__pycache__/

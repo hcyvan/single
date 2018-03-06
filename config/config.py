@@ -20,7 +20,6 @@ class ProdConfig(BaseConfig):
 class DevConfig(BaseConfig):
     DEBUG = True
     ENV = ENV.development
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///dog.db'
 
 
 class TestConfig(BaseConfig):

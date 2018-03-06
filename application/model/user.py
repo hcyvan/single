@@ -13,3 +13,10 @@ class User(BaseModel, UserMixin):
 
     exclude_fields = ['password']
 
+
+class Love(BaseModel):
+    id = Column(Integer, primary_key=True)
+    from_id = Column(Integer)
+    to_id = Column(Integer)
+    accept = Column(Integer, comment='0 未接受 1 被接受者 2 接受者')
+    commit = Column(String(256))

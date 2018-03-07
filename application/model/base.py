@@ -32,8 +32,8 @@ class BaseModel(db.Model):
         try:
             self.db.session.add(self)
             self.db.session.commit()
-            self.db.session.refresh(self)
-        except Exception:
+            # self.db.session.refresh(self)
+        except Exception as e:
             self.db.session.rollback()
 
     def delete(self):

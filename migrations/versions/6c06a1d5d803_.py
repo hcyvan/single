@@ -1,16 +1,16 @@
 """empty message
 
-Revision ID: 9953e18340b5
+Revision ID: 6c06a1d5d803
 Revises: 
-Create Date: 2018-03-07 17:40:48.277599
+Create Date: 2018-03-08 13:26:14.775433
 
 """
 from alembic import op
 import sqlalchemy as sa
-
+from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '9953e18340b5'
+revision = '6c06a1d5d803'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -25,7 +25,7 @@ def upgrade():
     sa.Column('from_id', sa.Integer(), nullable=True),
     sa.Column('to_id', sa.Integer(), nullable=True),
     sa.Column('status', sa.Integer(), nullable=True),
-    sa.Column('commit', sa.String(length=256), nullable=True),
+    sa.Column('comment', sa.String(length=256), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('notice',
@@ -34,6 +34,8 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('form_id', sa.Integer(), nullable=True),
     sa.Column('to_id', sa.Integer(), nullable=True),
+    sa.Column('type', sa.Integer(), nullable=True),
+    sa.Column('meta', postgresql.JSONB(astext_type=sa.Text()), nullable=True),
     sa.Column('content', sa.Text(), nullable=True),
     sa.Column('is_read', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
@@ -47,6 +49,7 @@ def upgrade():
     sa.Column('password', sa.String(length=128), nullable=True),
     sa.Column('cell', sa.String(length=64), nullable=True),
     sa.Column('point', sa.Integer(), nullable=True),
+    sa.Column('lover_id', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('cell')
     )

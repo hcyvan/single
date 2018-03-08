@@ -19,6 +19,8 @@ class BaseModel(db.Model):
             value = getattr(self, c, None)
             if isinstance(value, list):
                 result[c] = [e.to_dict() if isinstance(e, db.Model) else e for e in value]
+            elif isinstance(value, db.Model):
+                result[c] = value.to_dict()
             else:
                 result[c] = value
 
@@ -41,23 +43,3 @@ class BaseModel(db.Model):
         self.db.session.commit()
 
 
-def parse_model_list(models):
-    model_list = []
-    for model in models:
-        model_list.append(model.to_dict())
-
-    return model_list
-
-
-def parse_paginate(paginate):
-    models = paginate.items
-    model_list = parse_model_list(models)
-    result = {
-        'items': model_list,
-        'pages': paginate.pages,
-        'page_index': paginate.page,
-        'page_size': paginate.per_page,
-        'total': paginate.total,
-    }
-
-    return result

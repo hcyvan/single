@@ -1,12 +1,16 @@
-from sqlalchemy import Column, Integer, Text
+from sqlalchemy import Column, Integer
+from sqlalchemy.dialects.postgresql import JSONB
 
 from .base import BaseModel
+from config.constant import NoticeStatus
 
 
 class Notice(BaseModel):
     id = Column(Integer, primary_key=True)
-    form_id = Column(Integer, unique=True)
-    to_id = Column(Integer)
-    content = Column(Text)
-    is_read = Column(Integer)
+    receiver_id = Column(Integer)
+    type = Column(Integer)
+    meta = Column(JSONB)
+    is_read = Column(Integer, default=NoticeStatus.unread.value)
+
+    exclude_fields = ['updated']
 

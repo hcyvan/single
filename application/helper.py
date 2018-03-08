@@ -36,3 +36,24 @@ def response_json(code=SUCCESS, data=None, msg=None, status=None):
 
     return jsonify(response), status
 
+
+def parse_model_list(models):
+    model_list = []
+    for model in models:
+        model_list.append(model.to_dict())
+
+    return model_list
+
+
+def parse_paginate(paginate):
+    models = paginate.items
+    model_list = parse_model_list(models)
+    result = {
+        'items': model_list,
+        'pages': paginate.pages,
+        'page_index': paginate.page,
+        'page_size': paginate.per_page,
+        'total': paginate.total,
+    }
+
+    return result

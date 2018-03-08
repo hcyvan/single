@@ -13,6 +13,8 @@ class User(BaseModel, UserMixin):
     point = Column(Integer)
     lover_id = Column(Integer)
 
+    lover = relationship('User', primaryjoin='User.id == foreign(User.lover_id)', uselist=False)
+
     exclude_fields = ['password', 'updated']
 
 
@@ -20,11 +22,13 @@ class Love(BaseModel):
     id = Column(Integer, primary_key=True)
     from_id = Column(Integer)
     to_id = Column(Integer)
+    part_id = Column(Integer)
     status = Column(Integer, comment='0 未同意 1 同意 2 拒绝 3 拉黑')
-    comment = Column(String(256))
+    from_comment = Column(String(256))
+    to_comment = Column(String(256))
+    part_comment = Column(String(256))
 
     sender = relationship('User', primaryjoin='User.id == foreign(Love.from_id)', backref='send_love')
     receiver = relationship('User', primaryjoin='User.id == foreign(Love.to_id)', backref='receive_love')
 
     exclude_fields = ['updated']
-

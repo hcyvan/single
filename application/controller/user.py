@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import request
 from flask_bcrypt import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 from sqlalchemy.orm import joinedload
@@ -29,7 +29,14 @@ def login():
     return response_json(data=dict(id=user.id))
 
 
+@api.route('/session', methods=['GET'])
+@login_required
+def session():
+    return response_json(data=current_user.to_dict())
+
+
 @api.route('/logout', methods=['POST'])
+@login_required
 def logout():
     logout_user()
     return response_json(SUCCESS)
@@ -62,6 +69,8 @@ def register():
 def vindicate():
     object_id = request.json.get('object_id')
     comment = request.json.get('comment', '')
+    if current_user.point < 1:
+        return response_json(POINT_ZERO)
     if current_user.lover_id:
         return response_json(LOVE_SENDER_HAS_LOVER)
 
@@ -83,6 +92,7 @@ def vindicate():
         status=LoveStatus.on.value,
         comment=comment
     )
+    current_user.point = current_user.point - 1
     love.save()
 
     meta = dict(
@@ -116,6 +126,7 @@ def accept(love_id):
         if attitude == LoveStatus.agree.value:
             love.sender.lover_id = love.receiver.id
             love.receiver.lover_id = love.sender.id
+            love.receiver.point = love.receiver.point + 1
         love.save()
 
         meta = dict(
@@ -129,9 +140,3 @@ def accept(love_id):
         return response_json(SUCCESS)
     else:
         return response_json(LOVE_HANDLED)
-
-
-@api.route('/love/<love_id>', methods=['GET'])
-def read_love(love_id):
-    return jsonify(dict(key='This is love/get'))
-
